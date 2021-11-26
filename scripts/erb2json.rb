@@ -1,7 +1,12 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
+
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
 
 require 'erb'
 require 'json'
+require_relative '../src/lib/karabiner.rb'
 
 def _from(key_code, mandatory_modifiers, optional_modifiers)
   data = {}
@@ -31,9 +36,7 @@ def _to(events)
   events.each do |e|
     d = {}
     d['key_code'] = e[0]
-    unless e[1].nil?
-      d['modifiers'] = e[1]
-    end
+    e[1].nil? || d['modifiers'] = e[1]
 
     data << d
   end
@@ -44,10 +47,9 @@ def to(events)
   JSON.generate(_to(events))
 end
 
-
 def each_key(source_keys_list: :source_keys_list, dest_keys_list: :dest_keys_list, from_mandatory_modifiers: [], from_optional_modifiers: [], to_pre_events: [], to_modifiers: [], to_post_events: [], conditions: [], as_json: false)
   data = []
-  source_keys_list.each_with_index do |from_key,index|
+  source_keys_list.each_with_index do |from_key, index|
     to_key = dest_keys_list[index]
     d = {}
     d['type'] = 'basic'
@@ -55,17 +57,21 @@ def each_key(source_keys_list: :source_keys_list, dest_keys_list: :dest_keys_lis
 
     # Compile list of events to add to "to" section
     events = []
+
     to_pre_events.each do |e|
       events << e
     end
-    if to_modifiers[0].nil?
-      events << [to_key]
-    else
-      events << [to_key, to_modifiers]
-    end
+
+    events << if to_modifiers[0].nil?
+                [to_key]
+              else
+                [to_key, to_modifiers]
+              end
+
     to_post_events.each do |e|
       events << e
     end
+
     d['to'] = JSON.parse(to(events))
 
     if conditions.any?
@@ -85,11 +91,7 @@ def each_key(source_keys_list: :source_keys_list, dest_keys_list: :dest_keys_lis
 end
 
 def frontmost_application(type, app_aliases)
-  browser_bundle_identifiers = [
-    '^org\.mozilla\.firefox$',
-    '^com\.google\.Chrome$',
-    '^com\.apple\.Safari$',
-  ]
+  app_aliases.is_a?(Enumerable) || app_aliases = [app_aliases]
 
   emacs_bundle_identifiers = [
     '^org\.gnu\.Emacs$',
@@ -214,6 +216,14 @@ end
 
 def frontmost_application_unless(app_aliases)
   frontmost_application('frontmost_application_unless', app_aliases)
+end
+
+def input_source_if(input_sources)
+  JSON.generate(Karabiner.input_source_if(input_sources))
+end
+
+def input_source_unless(input_sources)
+  JSON.generate(Karabiner.input_source_unless(input_sources))
 end
 
 template = ERB.new $stdin.read

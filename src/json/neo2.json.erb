@@ -1,26 +1,101 @@
 {
     "title": "Neo2",
     "rules": [
-        {
-            "description": "Neo2 mod 3 and 4 keys",
-            "manipulators": <%= each_key(
-                as_json: true,
-                source_keys_list: [
-                    "backslash",
-                    "caps_lock",
-                    "grave_accent_and_tilde",
-                    "right_option",
-                ],
-                dest_keys_list: [
-                    "right_option",
-                    "right_option",
-                    "right_command",
-                    "left_command",
-                ],
-                from_optional_modifiers: [
-                    "shift", "option", "control", "command",
+        <%
+        # halt defaults to 'false'
+        def set_mod_4(value, halt = false)
+            if (halt)
+                { "set_variable" => { "name" => "neo2_mod_4", "value" => value }, "halt" => true }
+            else
+                { "set_variable" => { "name" => "neo2_mod_4", "value" => value } }
+            end
+        end
+
+        def device_condition(device_type)
+            case device_type
+            when :all then
+                []
+            when :if_apple then
+                [
+                    {
+                        "type" => "device_if",
+                        "identifiers" => [
+                            {
+                                "vendor_id" => 1452,
+                                "description" => "Apple devices"
+                            }
+                        ]
+                    }
                 ]
-            ) %>
+            when :unless_apple then
+                [
+                    {
+                        "type" => "device_unless",
+                        "identifiers" => [
+                            {
+                                "vendor_id" => 1452,
+                                "description" => "Apple devices"
+                            }
+                        ]
+                    }
+                ]
+            end
+        end
+
+        $if_mod_4_on         = { "type" => "variable_unless", "name" => "neo2_mod_4", "value" => 0 }
+        $if_mod_4_locked     = { "type" => "variable_if",     "name" => "neo2_mod_4", "value" => 2 }
+        $if_mod_4_not_locked = { "type" => "variable_unless", "name" => "neo2_mod_4", "value" => 2 }
+
+        def neo2_modifiers(mod_3_key, mod_4_key, device_type)
+            JSON.generate(
+                each_key(
+                    source_keys_list: [
+                        mod_3_key,
+                        "caps_lock",
+                        "right_option",
+                    ],
+                    dest_keys_list: [
+                        "right_option",
+                        "right_option",
+                        "right_command",
+                    ],
+                    from_optional_modifiers: ["any"]
+                ) + [mod_4_key].map { |from_key|
+                    {
+                        "type" => "basic",
+                        "from" => { "simultaneous" => [ { "key_code" => from_key }, { "key_code" => "right_command" } ] },
+                        "to" => [ set_mod_4(2, true) ],
+                        "conditions" => [ $if_mod_4_not_locked ] + device_condition(device_type)
+                    }
+                } + [mod_4_key].map { |from_key|
+                    {
+                        "type" => "basic",
+                        "from" => { "simultaneous" => [ { "key_code" => from_key }, { "key_code" => "right_command" } ] },
+                        "to" => [ set_mod_4(0) ],
+                        "conditions" => [ $if_mod_4_locked ] + device_condition(device_type)
+                    }
+                } + [mod_4_key, "right_command"].map { |from_key|
+                    {
+                        "type" => "basic",
+                        "from" => _from(from_key, [], ["any"]),
+                        "to" => [set_mod_4(1)],
+                        "to_after_key_up" => [set_mod_4(0)],
+                        "conditions" => [ $if_mod_4_not_locked ] + device_condition(device_type)
+                    }
+                }
+            )
+        end %>
+        {
+            "description": "Neo2 mod 3 and 4 keys (Apple keyboards). Rule applied to Apple-made keyboards only.",
+            "manipulators": <%= neo2_modifiers("backslash", "grave_accent_and_tilde", :if_apple) %>
+        },
+        {
+            "description": "Neo2 mod 3 and 4 keys (third party Mac keyboard). Rule applied to all keyboards.",
+            "manipulators": <%= neo2_modifiers("backslash", "grave_accent_and_tilde", :all) %>
+        },
+        {
+            "description": "Neo2 mod 3 and 4 keys (Windows keyboard). Rule applied to all non-Apple keyboards.",
+            "manipulators": <%= neo2_modifiers("non_us_pound", "non_us_backslash", :unless_apple) %>
         },
         {
             "description": "Neo2 layer 4",
@@ -52,10 +127,10 @@
                 "i" => "keypad_8",
                 "o" => "keypad_9",
                 "spacebar" => "keypad_0",
-                "9" => "keypad_equal_sign",    # divide
-                "0" => "keypad_slash",         # multiply
-                "hyphen" => "keypad_asterisk", # subtract
-                "p" => "keypad_hyphen",        # add
+                "9" => "keypad_slash",
+                "0" => "keypad_asterisk",
+                "hyphen" => "keypad_hyphen",
+                "p" => "keypad_plus",
                 "v" => "return_or_enter",
                 "quote" => "period",
                 "semicolon" => "comma",
@@ -75,24 +150,24 @@
                 each_key(
                     source_keys_list: l4_mappings.keys,
                     dest_keys_list: l4_mappings.values,
-                    from_mandatory_modifiers: ["right_command"],
-                    from_optional_modifiers: ["shift"]
+                    conditions: [$if_mod_4_on],
+                    from_optional_modifiers: ["shift", "caps_lock", "command", "left_option"]
                 ) + each_key(
                     source_keys_list: ["n", "slash"],
                     dest_keys_list: ["semicolon", "slash"],
-                    from_mandatory_modifiers: ["right_command"],
-                    from_optional_modifiers: ["shift"],
-                    to_modifiers: ["left_option"]
+                    conditions: [$if_mod_4_on],
+                    from_optional_modifiers: ["shift", "caps_lock", "command", "left_option"],
+                    to_modifiers: ["right_option"]
                 ) + each_key(
                     source_keys_list: ["b", "c", "a", "g"],
                     dest_keys_list: ["b", "w", "left_arrow", "right_arrow"],
-                    from_mandatory_modifiers: ["right_command"],
-                    from_optional_modifiers: ["shift"],
+                    conditions: [$if_mod_4_on],
+                    from_optional_modifiers: ["shift", "caps_lock", "left_option"],
                     to_modifiers: ["left_command"]
                 ) + each_key(
                     source_keys_list: l4_dead_key_mappings,
                     dest_keys_list: l4_dead_key_mappings,
-                    from_mandatory_modifiers: ["right_command"],
+                    conditions: [$if_mod_4_on],
                     to_modifiers: ["left_shift"],
                     to_pre_events: [["z", ["left_option", "left_shift"]]]
                 )
@@ -116,7 +191,8 @@
                 each_key(
                     source_keys_list: l6_dead_key_mappings,
                     dest_keys_list: l6_dead_key_mappings,
-                    from_mandatory_modifiers: ["right_command", "option"],
+                    conditions: [$if_mod_4_on],
+                    from_mandatory_modifiers: ["right_option"],
                     to_modifiers: ["left_shift", "left_option"],
                     to_pre_events: [["z", ["left_option", "left_shift"]]]
                 )
@@ -149,6 +225,41 @@
                     "to_if_alone": <%= to([["tab"]]) %>
                 }
             ]
+        },
+        {
+          "description": "Prevent problematic keys (?, /, #, =, and ')') from being treated as option key shortcut",
+          "manipulators": <%= JSON.generate(
+              each_key(
+                  source_keys_list: ["h", "s", "z", "o", "k"],
+                  dest_keys_list: ["h", "s", "z", "o", "k"],
+                  from_mandatory_modifiers: ["right_option"],
+                  to_modifiers: [],
+                  to_pre_events: [["a", ["left_option", "left_shift"]]]
+              )
+          ) %>
+        },
+        {
+          "description": "Prevent all layer 3 keys from being treated as option key shortcut",
+          "manipulators": <%= JSON.generate(
+              each_key(
+                  source_keys_list: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "open_bracket", "semicolon", "quote", "comma", "period", "slash"],
+                  dest_keys_list: ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "open_bracket", "semicolon", "quote", "comma", "period", "slash"],
+                  from_mandatory_modifiers: ["right_option"],
+                  to_modifiers: [],
+                  to_pre_events: [["a", ["left_option", "left_shift"]]]
+              )
+          ) %>
+        },
+        {
+          "description": "Neo2 mod 4: Map ↖ to Home and ↘︎ to End in terminal apps (move this rule above the rule 'Neo2 layer 4').",
+          "manipulators":
+            <%= each_key(
+                source_keys_list: ["a", "g"],
+                dest_keys_list: ["home", "end"],
+                conditions: [$if_mod_4_on, JSON.parse(frontmost_application_if(["terminal"])) ],
+                from_optional_modifiers: ["shift", "caps_lock", "left_option"],
+                as_json: true
+            ) %>
         }
     ]
 }
