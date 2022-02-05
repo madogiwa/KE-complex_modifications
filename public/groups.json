@@ -189,6 +189,9 @@
           "extra_description_path": "extra_descriptions/emacs_key_bindings.json.html"
         },
         {
+          "path": "json/emacs_mode.json"
+        },
+        {
           "path": "json/ergo_fly_keys.json",
           "extra_description_path": "extra_descriptions/ergo_fly_keys.json.html"
         },
@@ -1194,6 +1197,9 @@
         },
         {
           "path": "json/personal_javier_monton.json"
+        },
+        {
+          "path": "json/personal_madogiwa.json"
         }
       ]
     },
