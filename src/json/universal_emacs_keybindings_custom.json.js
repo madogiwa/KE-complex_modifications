@@ -438,12 +438,6 @@ function controlKeys() {
     },
     {
       type: 'basic',
-      from: {key_code: 'r', modifiers: withCtrlOrCapsLock()},
-      to: [{key_code: 'f', modifiers: 'command'}],
-      conditions: [unlessEmacs()],
-    },
-    {
-      type: 'basic',
       from: {key_code: 's', modifiers: withCtrlOrCapsLock()},
       to: [{key_code: 'f', modifiers: 'command'}],
       conditions: [unlessEmacs()],
