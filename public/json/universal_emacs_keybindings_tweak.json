@@ -1,0 +1,123 @@
+{
+    "title": "Universal Emacs Keybindings Tweak",
+    "rules": [
+        {
+            "description": "Clear mark after native cut (command+x) [requires Universal Emacs Keybindings]",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "x",
+                        "modifiers": { "mandatory": ["command"] }
+                    },
+                    "to": [
+                        {
+                            "key_code": "x",
+                            "modifiers": ["command"]
+                        },
+                        {
+                            "set_variable": {
+                                "name": "C-spacebar",
+                                "value": 0
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "variable_if",
+                            "name": "C-spacebar",
+                            "value": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": "Clear mark after native paste (command+v) [requires Universal Emacs Keybindings]",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "v",
+                        "modifiers": { "mandatory": ["command"] }
+                    },
+                    "to": [
+                        {
+                            "key_code": "v",
+                            "modifiers": ["command"]
+                        },
+                        {
+                            "set_variable": {
+                                "name": "C-spacebar",
+                                "value": 0
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "variable_if",
+                            "name": "C-spacebar",
+                            "value": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": "Clear mark after escape [requires Universal Emacs Keybindings]",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": { "key_code": "escape" },
+                    "to": [
+                        { "key_code": "escape" },
+                        {
+                            "set_variable": {
+                                "name": "C-spacebar",
+                                "value": 0
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "variable_if",
+                            "name": "C-spacebar",
+                            "value": 1
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "description": "Clear mark after control+[ [requires Universal Emacs Keybindings]",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "open_bracket",
+                        "modifiers": { "mandatory": ["control"] }
+                    },
+                    "to": [
+                        {
+                            "key_code": "open_bracket",
+                            "modifiers": ["control"]
+                        },
+                        {
+                            "set_variable": {
+                                "name": "C-spacebar",
+                                "value": 0
+                            }
+                        }
+                    ],
+                    "conditions": [
+                        {
+                            "type": "variable_if",
+                            "name": "C-spacebar",
+                            "value": 1
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
