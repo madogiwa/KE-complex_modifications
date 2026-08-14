@@ -551,8 +551,17 @@ function optionKeys() {
     {
       type: 'basic',
       from: {key_code: 'v', modifiers: {mandatory: ['option'], optional: ['shift']}},
-      to: [{key_code: 'page_up'}],
-      conditions: [unlessEmacs()],
+      to: [
+        {key_code: 'page_up'},
+        {set_variable: clearMark()},
+      ],
+      conditions: [unlessMarkActive(), unlessEmacs()],
+    },
+    {
+      type: 'basic',
+      from: {key_code: 'v', modifiers: {mandatory: ['option'], optional: ['shift']}},
+      to: [{key_code: 'page_up', modifiers: 'shift'}],
+      conditions: [ifMarkActive(), unlessEmacs()],
     },
     {
       type: 'basic',
