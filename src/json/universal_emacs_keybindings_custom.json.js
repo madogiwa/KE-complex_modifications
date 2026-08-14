@@ -11,7 +11,7 @@ function main() {
 
         rules: [
           {
-            description: 'Customized from Universal Emacs Keybindings by justintanner',
+            description: 'Customized version of Universal Emacs Keybindings by justintanner',
             manipulators: manipulators(),
           },
         ],
