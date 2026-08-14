@@ -451,7 +451,7 @@ function controlKeys() {
           set_variable: clearMark(),
         },
       ],
-      conditions: [ifMarkActive(), unlessEmacs()],
+      conditions: [unlessEmacs()],
     },
     {
       type: 'basic',

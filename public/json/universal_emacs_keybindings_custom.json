@@ -3867,11 +3867,6 @@
           ],
           "conditions": [
             {
-              "type": "variable_if",
-              "name": "C-spacebar",
-              "value": 1
-            },
-            {
               "type": "frontmost_application_unless",
               "bundle_identifiers": [
                 "^org\\.gnu\\.Emacs$",
