@@ -182,6 +182,12 @@ function cx() {
     },
     {
       type: 'basic',
+      from: {key_code: 'k', modifiers: {optional: ['caps_lock']}},
+      to: [{key_code: 'w', modifiers: ['command']}],
+      conditions: [ifCxActive(), unlessEmacs()],
+    },
+    {
+      type: 'basic',
       from: {key_code: 'k', modifiers: withCtrlOrCapsLock()},
       to: [{key_code: 'w', modifiers: ['command']}],
       conditions: [ifCxActive(), unlessEmacs()],
