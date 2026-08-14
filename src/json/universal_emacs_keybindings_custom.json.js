@@ -39,9 +39,17 @@ function unlessApp() {
 }
 
 function unlessEmacs() {
+  const textEditors = [].concat(
+    '^com\\.sublimetext\\.',
+    karabiner.bundleIdentifiers.visualStudioCode,
+    karabiner.bundleIdentifiers.jetbrainsIDE
+  )
+
   return {
     type: 'frontmost_application_unless',
-    bundle_identifiers: [].concat(karabiner.bundleIdentifiers.emacsKeyBindingsException, karabiner.bundleIdentifiers.jetbrainsIDE),
+    bundle_identifiers: karabiner.bundleIdentifiers.emacsKeyBindingsException.filter(function(identifier) {
+      return textEditors.indexOf(identifier) === -1
+    }),
   };
 }
 
