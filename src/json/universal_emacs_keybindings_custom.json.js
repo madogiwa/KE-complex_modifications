@@ -295,15 +295,8 @@ function controlKeys() {
     {
       type: 'basic',
       from: {key_code: 'a', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [
-        {
-          key_code: 'a',
-          modifiers: ['control'],
-        },
-        {
-          set_variable: clearMark(),
-        },
-      ],
+      to: [{key_code: 'a', modifiers: ['control']}],
+      to_after_key_up: [{set_variable: clearMark()}],
       conditions: [unlessMarkActive(), unlessEmacs()],
     },
     {
@@ -327,24 +320,15 @@ function controlKeys() {
     {
       type: 'basic',
       from: {key_code: 'd', modifiers: withCtrlOrCapsLock()},
-      to: [
-        {key_code: 'delete_forward'},
-        {set_variable: clearMark()}
-      ],
+      to: [{key_code: 'delete_forward'}],
+      to_after_key_up: [{set_variable: clearMark()}],
       conditions: [unlessEmacs()],
     },
     {
       type: 'basic',
       from: {key_code: 'e', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [
-        {
-          key_code: 'e',
-          modifiers: ['control'],
-        },
-        {
-          set_variable: clearMark(),
-        },
-      ],
+      to: [{key_code: 'e', modifiers: ['control']}],
+      to_after_key_up: [{set_variable: clearMark()}],
       conditions: [unlessMarkActive(), unlessEmacs()],
     },
     {
@@ -445,14 +429,8 @@ function controlKeys() {
     {
       type: 'basic',
       from: {key_code: 'v', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [
-        {
-          key_code: 'page_down',
-        },
-        {
-          set_variable: clearMark(),
-        },
-      ],
+      to: [{key_code: 'page_down'}],
+      to_after_key_up: [{set_variable: clearMark()}],
       conditions: [unlessMarkActive(), unlessEmacs()],
     },
     {
@@ -555,10 +533,8 @@ function optionKeys() {
     {
       type: 'basic',
       from: {key_code: 'v', modifiers: {mandatory: ['option'], optional: ['shift']}},
-      to: [
-        {key_code: 'page_up'},
-        {set_variable: clearMark()},
-      ],
+      to: [{key_code: 'page_up'}],
+      to_after_key_up: [{set_variable: clearMark()}],
       conditions: [unlessMarkActive(), unlessEmacs()],
     },
     {

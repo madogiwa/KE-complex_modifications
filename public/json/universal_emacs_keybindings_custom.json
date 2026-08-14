@@ -2022,7 +2022,9 @@
               "modifiers": [
                 "control"
               ]
-            },
+            }
+          ],
+          "to_after_key_up": [
             {
               "set_variable": {
                 "name": "C-spacebar",
@@ -2338,7 +2340,9 @@
           "to": [
             {
               "key_code": "delete_forward"
-            },
+            }
+          ],
+          "to_after_key_up": [
             {
               "set_variable": {
                 "name": "C-spacebar",
@@ -2417,7 +2421,9 @@
               "modifiers": [
                 "control"
               ]
-            },
+            }
+          ],
+          "to_after_key_up": [
             {
               "set_variable": {
                 "name": "C-spacebar",
@@ -3689,7 +3695,9 @@
           "to": [
             {
               "key_code": "page_down"
-            },
+            }
+          ],
+          "to_after_key_up": [
             {
               "set_variable": {
                 "name": "C-spacebar",
@@ -4542,7 +4550,9 @@
           "to": [
             {
               "key_code": "page_up"
-            },
+            }
+          ],
+          "to_after_key_up": [
             {
               "set_variable": {
                 "name": "C-spacebar",
