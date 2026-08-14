@@ -380,6 +380,16 @@ function controlKeys() {
     },
     {
       type: 'basic',
+      from: {key_code: 'k', modifiers: withCtrlOrCapsLock()},
+      to: [
+        {key_code: 'right_arrow', modifiers: ['command', 'shift']},
+        {key_code: 'x', modifiers: ['command']},
+        {set_variable: clearMark()},
+      ],
+      conditions: [unlessEmacs()],
+    },
+    {
+      type: 'basic',
       from: {key_code: 'n', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
       to: [{key_code: 'n', modifiers: ['control']}],
       conditions: [unlessMarkActive(), unlessEmacs(), unlessBrowser()],
