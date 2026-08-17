@@ -127,6 +127,7 @@ function manipulators() {
     // --- Comment to prevent line combination by Prettier ---
     cx(),
     markMovementForUnsupportedApps(),
+    markWordMovement(),
     controlKeys(),
     optionKeys()
   )
@@ -146,6 +147,21 @@ function markMovementForUnsupportedApps() {
       from: {key_code: keys[0], modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
       to: [{key_code: keys[1], modifiers: ['shift']}],
       conditions: [ifMarkActive(), unlessEmacs(), ifCtrlShiftMarkMovementUnsupported()],
+    };
+  });
+}
+
+// Extend the selection by whole words for M-b/M-f while the mark is active.
+function markWordMovement() {
+  return [
+    ['b', 'left_arrow'],
+    ['f', 'right_arrow'],
+  ].map(function(keys) {
+    return {
+      type: 'basic',
+      from: {key_code: keys[0], modifiers: {mandatory: ['option'], optional: ['shift']}},
+      to: [{key_code: keys[1], modifiers: ['option', 'shift']}],
+      conditions: [ifMarkActive(), unlessEmacs()],
     };
   });
 }
