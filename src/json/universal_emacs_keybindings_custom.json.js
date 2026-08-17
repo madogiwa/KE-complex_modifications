@@ -503,7 +503,10 @@ function controlKeys() {
         key_code: 'y',
         modifiers: withCtrlOrCapsLock(),
       },
-      to: [{key_code: 'v', modifiers: 'command'}],
+      to: [
+        {key_code: 'v', modifiers: 'command'},
+        {set_variable: clearMark()},
+      ],
       conditions: [unlessEmacs(), unlessTerminal()],
     },
     {
@@ -515,6 +518,7 @@ function controlKeys() {
       to: [
         {key_code: 'v', modifiers: 'command'},
         {key_code: 'y', modifiers: 'command'}, // Terminal pass-through
+        {set_variable: clearMark()},
       ],
       conditions: [unlessEmacs(), ifTerminal()],
     },
