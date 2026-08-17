@@ -60,6 +60,15 @@ function ifBrowser() {
   };
 }
 
+// Add applications here when Ctrl-Shift-B/F/N/P are assigned to application
+// commands instead of extending the current selection.
+function ifCtrlShiftMarkMovementUnsupported() {
+  return {
+    type: 'frontmost_application_if',
+    bundle_identifiers: karabiner.bundleIdentifiers.visualStudioCode,
+  };
+}
+
 function unlessBrowser() {
   return {
     type: 'frontmost_application_unless',
@@ -117,9 +126,28 @@ function manipulators() {
   return [].concat(
     // --- Comment to prevent line combination by Prettier ---
     cx(),
+    markMovementForUnsupportedApps(),
     controlKeys(),
     optionKeys()
   )
+}
+
+// Send Shift+arrow explicitly while the mark is active in applications that do
+// not implement Ctrl-Shift-B/F/N/P as selection movement.
+function markMovementForUnsupportedApps() {
+  return [
+    ['b', 'left_arrow'],
+    ['f', 'right_arrow'],
+    ['n', 'down_arrow'],
+    ['p', 'up_arrow'],
+  ].map(function(keys) {
+    return {
+      type: 'basic',
+      from: {key_code: keys[0], modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
+      to: [{key_code: keys[1], modifiers: ['shift']}],
+      conditions: [ifMarkActive(), unlessEmacs(), ifCtrlShiftMarkMovementUnsupported()],
+    };
+  });
 }
 
 function cx() {
