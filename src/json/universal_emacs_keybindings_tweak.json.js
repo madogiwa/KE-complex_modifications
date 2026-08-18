@@ -30,10 +30,6 @@ function main() {
             ],
           },
           {
-            description: 'Clear mark after control+[ [requires Universal Emacs Keybindings]',
-            manipulators: [clearMarkAndSend({key_code: 'open_bracket', modifiers: ['control']})],
-          },
-          {
             description: 'VS Code companion rule: change control+p/control+f to up/right arrows [for use with Universal Emacs Keybindings]',
             manipulators: [
               mapControlKeyToArrow('p', 'up_arrow'),
