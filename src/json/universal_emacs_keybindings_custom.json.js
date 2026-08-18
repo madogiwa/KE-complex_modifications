@@ -396,6 +396,12 @@ function controlKeys() {
     {
       type: 'basic',
       from: {key_code: 'g', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
+      to: [{set_variable: clearMark()}],
+      conditions: [ifMarkActive(), unlessEmacs()],
+    },
+    {
+      type: 'basic',
+      from: {key_code: 'g', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
       to: [
         {
           set_variable: clearMark(),
@@ -404,7 +410,7 @@ function controlKeys() {
           key_code: 'escape',
         },
       ],
-      conditions: [unlessEmacs()],
+      conditions: [unlessMarkActive(), unlessEmacs()],
     },
     {
       type: 'basic',
