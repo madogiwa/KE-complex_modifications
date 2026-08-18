@@ -64,6 +64,16 @@ function main() {
             ],
           },
           {
+            description: 'Clear mark only when Control+[ is pressed while mark is set [requires Universal Emacs Keybindings]',
+            manipulators: [
+              basicManipulator(
+                keyWithModifiers('open_bracket', ['control']),
+                [{ set_variable: clearMark() }],
+                [ifMarkActive(), unlessEmacsKeyBindingsExceptionWithoutEditors()]
+              ),
+            ],
+          },
+          {
             description: 'Control+[ to Escape',
             manipulators: [
               basicManipulator(
@@ -118,6 +128,14 @@ function keyWithModifiers(keyCode, mandatoryModifiers) {
     key_code: keyCode,
     modifiers: modifiers,
   }
+}
+
+function ifMarkActive() {
+  return { type: 'variable_if', name: 'C-spacebar', value: 1 }
+}
+
+function clearMark() {
+  return { name: 'C-spacebar', value: 0 }
 }
 
 function ifTerminalOrVi() {
