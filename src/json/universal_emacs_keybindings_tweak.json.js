@@ -33,6 +33,13 @@ function main() {
             description: 'Clear mark after control+[ [requires Universal Emacs Keybindings]',
             manipulators: [clearMarkAndSend({key_code: 'open_bracket', modifiers: ['control']})],
           },
+          {
+            description: 'VS Code companion rule: change control+p/control+f to up/right arrows [for use with Universal Emacs Keybindings]',
+            manipulators: [
+              mapControlKeyToArrow('p', 'up_arrow'),
+              mapControlKeyToArrow('f', 'right_arrow'),
+            ],
+          },
         ],
       },
       null,
@@ -61,6 +68,23 @@ function clearMarkAndSend(key) {
       {set_variable: clearMark()},
     ],
     conditions: [ifMarkActive()],
+  }
+}
+
+function mapControlKeyToArrow(keyCode, arrowKeyCode) {
+  return {
+    type: 'basic',
+    from: {
+      key_code: keyCode,
+      modifiers: {mandatory: ['control']},
+    },
+    to: [{key_code: arrowKeyCode}],
+    conditions: [
+      {
+        type: 'frontmost_application_if',
+        bundle_identifiers: ['^com\\.microsoft\\.VSCode$', '^com\\.microsoft\\.VSCodeInsiders$'],
+      },
+    ],
   }
 }
 

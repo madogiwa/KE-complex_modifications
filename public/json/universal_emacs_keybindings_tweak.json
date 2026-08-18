@@ -118,6 +118,45 @@
                     ]
                 }
             ]
+        },
+        {
+            "description": "VS Code companion rule: change control+p/control+f to up/right arrows [for use with Universal Emacs Keybindings]",
+            "manipulators": [
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "p",
+                        "modifiers": { "mandatory": ["control"] }
+                    },
+                    "to": [{ "key_code": "up_arrow" }],
+                    "conditions": [
+                        {
+                            "type": "frontmost_application_if",
+                            "bundle_identifiers": [
+                                "^com\\.microsoft\\.VSCode$",
+                                "^com\\.microsoft\\.VSCodeInsiders$"
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "type": "basic",
+                    "from": {
+                        "key_code": "f",
+                        "modifiers": { "mandatory": ["control"] }
+                    },
+                    "to": [{ "key_code": "right_arrow" }],
+                    "conditions": [
+                        {
+                            "type": "frontmost_application_if",
+                            "bundle_identifiers": [
+                                "^com\\.microsoft\\.VSCode$",
+                                "^com\\.microsoft\\.VSCodeInsiders$"
+                            ]
+                        }
+                    ]
+                }
+            ]
         }
     ]
 }
