@@ -16,15 +16,12 @@ function main() {
             manipulators: [clearMarkAndSend({key_code: 'v', modifiers: ['command']})],
           },
           {
-            description: 'Clear mark after escape [requires Universal Emacs Keybindings]',
+            description: 'Clear mark only when escape is pressed while mark is set [requires Universal Emacs Keybindings]',
             manipulators: [
               {
                 type: 'basic',
                 from: {key_code: 'escape'},
-                to: [
-                  {key_code: 'escape'},
-                  {set_variable: clearMark()},
-                ],
+                to: [{set_variable: clearMark()}],
                 conditions: [ifMarkActive()],
               },
             ],
