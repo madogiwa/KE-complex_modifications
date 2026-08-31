@@ -129,7 +129,8 @@ function manipulators() {
     markMovementForUnsupportedApps(),
     markWordMovement(),
     controlKeys(),
-    optionKeys()
+    optionKeys(),
+    clearMarkOnTextInput()
   )
 }
 
@@ -636,6 +637,39 @@ function optionKeys() {
       conditions: [unlessEmacs()],
     },
   ]
+}
+
+// Karabiner's mark variable is independent from the application's selection.
+// Clear it when regular typing replaces the native selection, while keeping
+// modifier shortcuts and navigation keys available for mark movement.
+function clearMarkOnTextInput() {
+  const keyCodes = [
+    'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm',
+    'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z',
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    'grave_accent_and_tilde', 'hyphen', 'equal_sign', 'open_bracket',
+    'close_bracket', 'backslash', 'semicolon', 'quote', 'comma', 'period',
+    'slash', 'spacebar', 'return_or_enter',
+  ]
+
+  function manipulator(keyCode, modifiers, toModifiers) {
+    return {
+      type: 'basic',
+      from: {key_code: keyCode, modifiers: modifiers},
+      to: [
+        {set_variable: clearMark()},
+        {key_code: keyCode, modifiers: toModifiers},
+      ],
+      conditions: [ifMarkActive(), unlessEmacs()],
+    }
+  }
+
+  return keyCodes.reduce(function(result, keyCode) {
+    return result.concat(
+      manipulator(keyCode, {optional: ['caps_lock']}, []),
+      manipulator(keyCode, {mandatory: ['shift'], optional: ['caps_lock']}, ['shift'])
+    )
+  }, [])
 }
 
 main()
