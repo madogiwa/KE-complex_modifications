@@ -102,7 +102,7 @@
       ]
     },
     {
-      "description": "VS Code companion rule: change control+p/control+f to up/right arrows [for use with Universal Emacs Keybindings]",
+      "description": "VS Code: Control+P/F to Up/Right when mark is not set [place above Universal Emacs Keybindings]",
       "manipulators": [
         {
           "type": "basic",
@@ -111,15 +111,30 @@
             "modifiers": {
               "mandatory": [
                 "control"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
               ]
             }
           },
           "to": [
             {
-              "key_code": "up_arrow"
+              "key_code": "up_arrow",
+              "modifiers": []
             }
           ],
           "conditions": [
+            {
+              "type": "variable_unless",
+              "name": "C-spacebar",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "C-x",
+              "value": 1
+            },
             {
               "type": "frontmost_application_if",
               "bundle_identifiers": [
@@ -136,20 +151,233 @@
             "modifiers": {
               "mandatory": [
                 "control"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
               ]
             }
           },
           "to": [
             {
-              "key_code": "right_arrow"
+              "key_code": "right_arrow",
+              "modifiers": []
             }
           ],
           "conditions": [
+            {
+              "type": "variable_unless",
+              "name": "C-spacebar",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "C-x",
+              "value": 1
+            },
             {
               "type": "frontmost_application_if",
               "bundle_identifiers": [
                 "^com\\.microsoft\\.VSCode$",
                 "^com\\.microsoft\\.VSCodeInsiders$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Browsers: Control+B/F to Left/Right when mark is not set [place above Universal Emacs Keybindings]",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "b",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": []
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_unless",
+              "name": "C-spacebar",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "C-x",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^org\\.mozilla\\.firefox$",
+                "^org\\.mozilla\\.firefoxdeveloperedition$",
+                "^org\\.mozilla\\.nightly$",
+                "^com\\.microsoft\\.Edge",
+                "^com\\.microsoft\\.edgemac",
+                "^com\\.google\\.Chrome$",
+                "^com\\.brave\\.Browser$",
+                "^com\\.apple\\.Safari$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "f",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": []
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_unless",
+              "name": "C-spacebar",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "C-x",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^org\\.mozilla\\.firefox$",
+                "^org\\.mozilla\\.firefoxdeveloperedition$",
+                "^org\\.mozilla\\.nightly$",
+                "^com\\.microsoft\\.Edge",
+                "^com\\.microsoft\\.edgemac",
+                "^com\\.google\\.Chrome$",
+                "^com\\.brave\\.Browser$",
+                "^com\\.apple\\.Safari$"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "description": "Browsers: Control+A/E to Command+Left/Right when mark is not set [place above Universal Emacs Keybindings]",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "a",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "left_arrow",
+              "modifiers": [
+                "command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_unless",
+              "name": "C-spacebar",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "C-x",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^org\\.mozilla\\.firefox$",
+                "^org\\.mozilla\\.firefoxdeveloperedition$",
+                "^org\\.mozilla\\.nightly$",
+                "^com\\.microsoft\\.Edge",
+                "^com\\.microsoft\\.edgemac",
+                "^com\\.google\\.Chrome$",
+                "^com\\.brave\\.Browser$",
+                "^com\\.apple\\.Safari$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "e",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "right_arrow",
+              "modifiers": [
+                "command"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_unless",
+              "name": "C-spacebar",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "C-x",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^org\\.mozilla\\.firefox$",
+                "^org\\.mozilla\\.firefoxdeveloperedition$",
+                "^org\\.mozilla\\.nightly$",
+                "^com\\.microsoft\\.Edge",
+                "^com\\.microsoft\\.edgemac",
+                "^com\\.google\\.Chrome$",
+                "^com\\.brave\\.Browser$",
+                "^com\\.apple\\.Safari$"
               ]
             }
           ]

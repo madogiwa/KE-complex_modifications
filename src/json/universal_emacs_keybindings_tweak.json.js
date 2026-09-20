@@ -1,5 +1,7 @@
 // JavaScript should be written in ECMAScript 5.1.
 
+const karabiner = require('../lib/karabiner')
+
 function main() {
   console.log(
     JSON.stringify(
@@ -27,10 +29,24 @@ function main() {
             ],
           },
           {
-            description: 'VS Code companion rule: change control+p/control+f to up/right arrows [for use with Universal Emacs Keybindings]',
+            description: 'VS Code: Control+P/F to Up/Right when mark is not set [place above Universal Emacs Keybindings]',
             manipulators: [
-              mapControlKeyToArrow('p', 'up_arrow'),
-              mapControlKeyToArrow('f', 'right_arrow'),
+              mapControlKeyToArrow('p', 'up_arrow', [], vsCodeIdentifiers()),
+              mapControlKeyToArrow('f', 'right_arrow', [], vsCodeIdentifiers()),
+            ],
+          },
+          {
+            description: 'Browsers: Control+B/F to Left/Right when mark is not set [place above Universal Emacs Keybindings]',
+            manipulators: [
+              mapControlKeyToArrow('b', 'left_arrow', [], karabiner.bundleIdentifiers.browser),
+              mapControlKeyToArrow('f', 'right_arrow', [], karabiner.bundleIdentifiers.browser),
+            ],
+          },
+          {
+            description: 'Browsers: Control+A/E to Command+Left/Right when mark is not set [place above Universal Emacs Keybindings]',
+            manipulators: [
+              mapControlKeyToArrow('a', 'left_arrow', ['command'], karabiner.bundleIdentifiers.browser),
+              mapControlKeyToArrow('e', 'right_arrow', ['command'], karabiner.bundleIdentifiers.browser),
             ],
           },
         ],
@@ -64,18 +80,26 @@ function clearMarkAndSend(key) {
   }
 }
 
-function mapControlKeyToArrow(keyCode, arrowKeyCode) {
+function vsCodeIdentifiers() {
+  return ['^com\\.microsoft\\.VSCode$', '^com\\.microsoft\\.VSCodeInsiders$']
+}
+
+// Only override ordinary movement. The base rules handle mark selection and
+// C-x commands, even when these optional tweaks are placed above them.
+function mapControlKeyToArrow(keyCode, arrowKeyCode, toModifiers, bundleIdentifiers) {
   return {
     type: 'basic',
     from: {
       key_code: keyCode,
-      modifiers: {mandatory: ['control']},
+      modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']},
     },
-    to: [{key_code: arrowKeyCode}],
+    to: [{key_code: arrowKeyCode, modifiers: toModifiers}],
     conditions: [
+      {type: 'variable_unless', name: 'C-spacebar', value: 1},
+      {type: 'variable_unless', name: 'C-x', value: 1},
       {
         type: 'frontmost_application_if',
-        bundle_identifiers: ['^com\\.microsoft\\.VSCode$', '^com\\.microsoft\\.VSCodeInsiders$'],
+        bundle_identifiers: bundleIdentifiers,
       },
     ],
   }
