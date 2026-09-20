@@ -5,7 +5,7 @@
   ],
   "rules": [
     {
-      "description": "Customized version of Universal Emacs Keybindings by justintanner",
+      "description": "Customized version of Universal Emacs Keybindings by justintanner [Chrome Apps are treated as browsers]",
       "manipulators": [
         {
           "type": "basic",
@@ -368,6 +368,7 @@
                 "^com\\.microsoft\\.Edge",
                 "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.google\\.Chrome\\.app\\..+$",
                 "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
@@ -410,6 +411,7 @@
                 "^com\\.microsoft\\.Edge",
                 "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.google\\.Chrome\\.app\\..+$",
                 "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
@@ -452,6 +454,7 @@
                 "^com\\.microsoft\\.Edge",
                 "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.google\\.Chrome\\.app\\..+$",
                 "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
@@ -542,6 +545,7 @@
                 "^com\\.microsoft\\.Edge",
                 "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.google\\.Chrome\\.app\\..+$",
                 "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
@@ -1092,6 +1096,7 @@
                 "^com\\.microsoft\\.Edge",
                 "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.google\\.Chrome\\.app\\..+$",
                 "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
@@ -1384,6 +1389,7 @@
                 "^com\\.microsoft\\.Edge",
                 "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.google\\.Chrome\\.app\\..+$",
                 "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
@@ -3678,6 +3684,7 @@
                 "^com\\.microsoft\\.Edge",
                 "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.google\\.Chrome\\.app\\..+$",
                 "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
@@ -3766,6 +3773,7 @@
                 "^com\\.microsoft\\.Edge",
                 "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.google\\.Chrome\\.app\\..+$",
                 "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
@@ -3857,6 +3865,7 @@
                 "^com\\.microsoft\\.Edge",
                 "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.google\\.Chrome\\.app\\..+$",
                 "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]
@@ -3945,6 +3954,7 @@
                 "^com\\.microsoft\\.Edge",
                 "^com\\.microsoft\\.edgemac",
                 "^com\\.google\\.Chrome$",
+                "^com\\.google\\.Chrome\\.app\\..+$",
                 "^com\\.brave\\.Browser$",
                 "^com\\.apple\\.Safari$"
               ]

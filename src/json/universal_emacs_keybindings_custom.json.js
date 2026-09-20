@@ -11,7 +11,7 @@ function main() {
 
         rules: [
           {
-            description: 'Customized version of Universal Emacs Keybindings by justintanner',
+            description: 'Customized version of Universal Emacs Keybindings by justintanner [Chrome Apps are treated as browsers]',
             manipulators: manipulators(),
           },
         ],
@@ -56,15 +56,21 @@ function unlessEmacs() {
 function ifBrowser() {
   return {
     type: 'frontmost_application_if',
-    bundle_identifiers: karabiner.bundleIdentifiers.browser,
+    bundle_identifiers: browserBundleIdentifiers(),
   };
 }
 
 function unlessBrowser() {
   return {
     type: 'frontmost_application_unless',
-    bundle_identifiers: karabiner.bundleIdentifiers.browser,
+    bundle_identifiers: browserBundleIdentifiers(),
   };
+}
+
+function browserBundleIdentifiers() {
+  return [].concat(karabiner.bundleIdentifiers.browser, [
+    '^com\\.google\\.Chrome\\.app\\..+$',
+  ]);
 }
 
 function ifFirefox() {
