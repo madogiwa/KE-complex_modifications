@@ -21,10 +21,12 @@ function main() {
             ],
           },
           {
-            description: 'VS Code: Control+P/F to Up/Right when mark is not set [place above Universal Emacs Keybindings]',
+            description: 'VS Code: Control+B/F/N/P to Left/Right/Down/Up when mark is not set [place above Universal Emacs Keybindings]',
             manipulators: [
-              mapControlKeyToArrow('p', 'up_arrow', [], vsCodeIdentifiers()),
+              mapControlKeyToArrow('b', 'left_arrow', [], vsCodeIdentifiers()),
               mapControlKeyToArrow('f', 'right_arrow', [], vsCodeIdentifiers()),
+              mapControlKeyToArrow('n', 'down_arrow', [], vsCodeIdentifiers()),
+              mapControlKeyToArrow('p', 'up_arrow', [], vsCodeIdentifiers()),
             ],
           },
           {

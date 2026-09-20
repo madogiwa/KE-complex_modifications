@@ -28,12 +28,12 @@
       ]
     },
     {
-      "description": "VS Code: Control+P/F to Up/Right when mark is not set [place above Universal Emacs Keybindings]",
+      "description": "VS Code: Control+B/F/N/P to Left/Right/Down/Up when mark is not set [place above Universal Emacs Keybindings]",
       "manipulators": [
         {
           "type": "basic",
           "from": {
-            "key_code": "p",
+            "key_code": "b",
             "modifiers": {
               "mandatory": [
                 "control"
@@ -46,7 +46,7 @@
           },
           "to": [
             {
-              "key_code": "up_arrow",
+              "key_code": "left_arrow",
               "modifiers": []
             }
           ],
@@ -87,6 +87,86 @@
           "to": [
             {
               "key_code": "right_arrow",
+              "modifiers": []
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_unless",
+              "name": "C-spacebar",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "C-x",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.microsoft\\.VSCode$",
+                "^com\\.microsoft\\.VSCodeInsiders$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "n",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "down_arrow",
+              "modifiers": []
+            }
+          ],
+          "conditions": [
+            {
+              "type": "variable_unless",
+              "name": "C-spacebar",
+              "value": 1
+            },
+            {
+              "type": "variable_unless",
+              "name": "C-x",
+              "value": 1
+            },
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.microsoft\\.VSCode$",
+                "^com\\.microsoft\\.VSCodeInsiders$"
+              ]
+            }
+          ]
+        },
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "p",
+            "modifiers": {
+              "mandatory": [
+                "control"
+              ],
+              "optional": [
+                "caps_lock",
+                "shift"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "up_arrow",
               "modifiers": []
             }
           ],
