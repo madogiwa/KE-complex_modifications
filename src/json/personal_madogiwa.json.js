@@ -23,6 +23,15 @@ function main() {
         maintainers: ['madogiwa'],
         rules: [
           {
+            description: 'Control+1...9,0 to Control+Option+1...9,0 for desktop switching',
+            manipulators: ['1', '2', '3', '4', '5', '6', '7', '8', '9', '0'].map(function (keyCode) {
+              return basicManipulator(
+                keyWithModifiers(keyCode, ['control']),
+                [{ key_code: keyCode, modifiers: ['control', 'option'] }]
+              )
+            }),
+          },
+          {
             description: 'Control+Shift+J to turn on Japanese IME (japanese_kana)',
             manipulators: [
               basicManipulator(
