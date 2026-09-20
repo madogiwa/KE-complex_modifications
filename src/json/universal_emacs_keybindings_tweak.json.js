@@ -32,15 +32,15 @@ function main() {
           {
             description: 'Browsers: Control+B/F to Left/Right when mark is not set [place above Universal Emacs Keybindings]',
             manipulators: [
-              mapControlKeyToArrow('b', 'left_arrow', [], karabiner.bundleIdentifiers.browser),
-              mapControlKeyToArrow('f', 'right_arrow', [], karabiner.bundleIdentifiers.browser),
+              mapControlKeyToArrow('b', 'left_arrow', [], browserBundleIdentifiers()),
+              mapControlKeyToArrow('f', 'right_arrow', [], browserBundleIdentifiers()),
             ],
           },
           {
             description: 'Browsers: Control+A/E to Command+Left/Right when mark is not set [place above Universal Emacs Keybindings]',
             manipulators: [
-              mapControlKeyToArrow('a', 'left_arrow', ['command'], karabiner.bundleIdentifiers.browser),
-              mapControlKeyToArrow('e', 'right_arrow', ['command'], karabiner.bundleIdentifiers.browser),
+              mapControlKeyToArrow('a', 'left_arrow', ['command'], browserBundleIdentifiers()),
+              mapControlKeyToArrow('e', 'right_arrow', ['command'], browserBundleIdentifiers()),
             ],
           },
         ],
@@ -61,6 +61,12 @@ function clearMark() {
 
 function vsCodeIdentifiers() {
   return ['^com\\.microsoft\\.VSCode$', '^com\\.microsoft\\.VSCodeInsiders$']
+}
+
+function browserBundleIdentifiers() {
+  return [].concat(karabiner.bundleIdentifiers.browser, [
+    '^com\\.google\\.Chrome\\.app\\..+$',
+  ])
 }
 
 // Only override ordinary movement. The base rules handle mark selection and
