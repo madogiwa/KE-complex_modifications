@@ -60,15 +60,6 @@ function ifBrowser() {
   };
 }
 
-// Add applications here when Ctrl-Shift-B/F/N/P are assigned to application
-// commands instead of extending the current selection.
-function ifCtrlShiftMarkMovementUnsupported() {
-  return {
-    type: 'frontmost_application_if',
-    bundle_identifiers: karabiner.bundleIdentifiers.visualStudioCode,
-  };
-}
-
 function unlessBrowser() {
   return {
     type: 'frontmost_application_unless',
@@ -126,45 +117,42 @@ function manipulators() {
   return [].concat(
     // --- Comment to prevent line combination by Prettier ---
     cx(),
-    markMovementForUnsupportedApps(),
-    markWordMovement(),
+    markMovement(),
     controlKeys(),
     optionKeys(),
     clearMarkOnTextInput()
   )
 }
 
-// Send Shift+arrow explicitly while the mark is active in applications that do
-// not implement Ctrl-Shift-B/F/N/P as selection movement.
-function markMovementForUnsupportedApps() {
-  return [
-    ['b', 'left_arrow'],
-    ['f', 'right_arrow'],
-    ['n', 'down_arrow'],
-    ['p', 'up_arrow'],
-  ].map(function(keys) {
+// While mark is active, send explicit selection keys in every supported app.
+// Keep this after cx() so prefix commands take priority over movement.
+function markMovement() {
+  function selection(keyCode, modifiers, toKeyCode, toModifiers) {
     return {
       type: 'basic',
-      from: {key_code: keys[0], modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [{key_code: keys[1], modifiers: ['shift']}],
-      conditions: [ifMarkActive(), unlessEmacs(), ifCtrlShiftMarkMovementUnsupported()],
-    };
-  });
-}
-
-// Extend the selection by whole words for M-b/M-f while the mark is active.
-function markWordMovement() {
-  return [
-    ['b', 'left_arrow'],
-    ['f', 'right_arrow'],
-  ].map(function(keys) {
-    return {
-      type: 'basic',
-      from: {key_code: keys[0], modifiers: {mandatory: ['option'], optional: ['shift']}},
-      to: [{key_code: keys[1], modifiers: ['option', 'shift']}],
+      from: {
+        key_code: keyCode,
+        modifiers: {mandatory: modifiers, optional: modifiers.indexOf('shift') === -1 ? ['caps_lock', 'shift'] : ['caps_lock']},
+      },
+      to: [{key_code: toKeyCode, modifiers: toModifiers.concat('shift')}],
       conditions: [ifMarkActive(), unlessEmacs()],
     };
-  });
+  }
+
+  return [
+    selection('b', ['control'], 'left_arrow', []),
+    selection('f', ['control'], 'right_arrow', []),
+    selection('n', ['control'], 'down_arrow', []),
+    selection('p', ['control'], 'up_arrow', []),
+    selection('a', ['control'], 'left_arrow', ['command']),
+    selection('e', ['control'], 'right_arrow', ['command']),
+    selection('b', ['option'], 'left_arrow', ['option']),
+    selection('f', ['option'], 'right_arrow', ['option']),
+    selection('v', ['control'], 'page_down', []),
+    selection('v', ['option'], 'page_up', []),
+    selection('comma', ['option', 'shift'], 'up_arrow', ['command']),
+    selection('period', ['option', 'shift'], 'down_arrow', ['command']),
+  ];
 }
 
 function cx() {
@@ -346,21 +334,9 @@ function controlKeys() {
     },
     {
       type: 'basic',
-      from: {key_code: 'a', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [{key_code: 'a', modifiers: ['shift', 'control']}],
-      conditions: [ifMarkActive(), unlessEmacs()],
-    },
-    {
-      type: 'basic',
       from: {key_code: 'b', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
       to: [{key_code: 'b', modifiers: ['control']}],
       conditions: [unlessMarkActive(), unlessEmacs()],
-    },
-    {
-      type: 'basic',
-      from: {key_code: 'b', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [{key_code: 'b', modifiers: ['shift', 'control']}],
-      conditions: [ifMarkActive(), unlessEmacs()],
     },
     {
       type: 'basic',
@@ -378,21 +354,9 @@ function controlKeys() {
     },
     {
       type: 'basic',
-      from: {key_code: 'e', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [{key_code: 'e', modifiers: ['shift', 'control']}],
-      conditions: [ifMarkActive(), unlessEmacs()],
-    },
-    {
-      type: 'basic',
       from: {key_code: 'f', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
       to: [{key_code: 'f', modifiers: ['control']}],
       conditions: [unlessMarkActive(), unlessEmacs()],
-    },
-    {
-      type: 'basic',
-      from: {key_code: 'f', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [{key_code: 'f', modifiers: ['shift', 'control']}],
-      conditions: [ifMarkActive(), unlessEmacs()],
     },
     {
       type: 'basic',
@@ -432,20 +396,8 @@ function controlKeys() {
     {
       type: 'basic',
       from: {key_code: 'n', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [{key_code: 'n', modifiers: ['shift', 'control']}],
-      conditions: [ifMarkActive(), unlessEmacs(), unlessBrowser()],
-    },
-    {
-      type: 'basic',
-      from: {key_code: 'n', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
       to: [{key_code: 'down_arrow'}],
       conditions: [unlessMarkActive(), unlessEmacs(), ifBrowser()],
-    },
-    {
-      type: 'basic',
-      from: {key_code: 'n', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [{key_code: 'down_arrow', modifiers: ['shift']}],
-      conditions: [ifMarkActive(), unlessEmacs(), ifBrowser()],
     },
     {
       type: 'basic',
@@ -456,20 +408,8 @@ function controlKeys() {
     {
       type: 'basic',
       from: {key_code: 'p', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [{key_code: 'p', modifiers: ['shift', 'control']}],
-      conditions: [ifMarkActive(), unlessEmacs(), unlessBrowser()],
-    },
-    {
-      type: 'basic',
-      from: {key_code: 'p', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
       to: [{key_code: 'up_arrow'}],
       conditions: [unlessMarkActive(), unlessEmacs(), ifBrowser()],
-    },
-    {
-      type: 'basic',
-      from: {key_code: 'p', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [{key_code: 'up_arrow', modifiers: ['shift']}],
-      conditions: [ifMarkActive(), unlessEmacs(), ifBrowser()],
     },
     {
       type: 'basic',
@@ -483,12 +423,6 @@ function controlKeys() {
       to: [{key_code: 'page_down'}],
       to_after_key_up: [{set_variable: clearMark()}],
       conditions: [unlessMarkActive(), unlessEmacs()],
-    },
-    {
-      type: 'basic',
-      from: {key_code: 'v', modifiers: {mandatory: ['control'], optional: ['caps_lock', 'shift']}},
-      to: [{key_code: 'page_down', modifiers: 'shift'}],
-      conditions: [ifMarkActive(), unlessEmacs()],
     },
     {
       type: 'basic',
@@ -591,12 +525,6 @@ function optionKeys() {
       to: [{key_code: 'page_up'}],
       to_after_key_up: [{set_variable: clearMark()}],
       conditions: [unlessMarkActive(), unlessEmacs()],
-    },
-    {
-      type: 'basic',
-      from: {key_code: 'v', modifiers: {mandatory: ['option'], optional: ['shift']}},
-      to: [{key_code: 'page_up', modifiers: 'shift'}],
-      conditions: [ifMarkActive(), unlessEmacs()],
     },
     {
       type: 'basic',
