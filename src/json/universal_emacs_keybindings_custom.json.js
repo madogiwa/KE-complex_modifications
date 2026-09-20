@@ -11,7 +11,7 @@ function main() {
 
         rules: [
           {
-            description: 'Customized version of Universal Emacs Keybindings by justintanner [Chrome Apps are treated as browsers]',
+            description: 'Customized version of Universal Emacs Keybindings by justintanner',
             manipulators: manipulators(),
           },
         ],
