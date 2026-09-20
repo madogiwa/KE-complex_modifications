@@ -10,14 +10,6 @@ function main() {
 
         rules: [
           {
-            description: 'Clear mark after native cut (command+x) [requires Universal Emacs Keybindings]',
-            manipulators: [clearMarkAndSend({key_code: 'x', modifiers: ['command']})],
-          },
-          {
-            description: 'Clear mark after native paste (command+v) [requires Universal Emacs Keybindings]',
-            manipulators: [clearMarkAndSend({key_code: 'v', modifiers: ['command']})],
-          },
-          {
             description: 'Clear mark only when escape is pressed while mark is set [requires Universal Emacs Keybindings]',
             manipulators: [
               {
@@ -63,21 +55,6 @@ function ifMarkActive() {
 
 function clearMark() {
   return {name: 'C-spacebar', value: 0}
-}
-
-function clearMarkAndSend(key) {
-  return {
-    type: 'basic',
-    from: {
-      key_code: key.key_code,
-      modifiers: {mandatory: key.modifiers},
-    },
-    to: [
-      key,
-      {set_variable: clearMark()},
-    ],
-    conditions: [ifMarkActive()],
-  }
 }
 
 function vsCodeIdentifiers() {
