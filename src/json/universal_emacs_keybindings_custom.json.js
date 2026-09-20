@@ -120,8 +120,27 @@ function manipulators() {
     markMovement(),
     controlKeys(),
     optionKeys(),
+    clearMarkAfterNativeEditing(),
     clearMarkOnTextInput()
   )
+}
+
+// Keep native cut/paste consistent with C-w/C-y, after prefix handling.
+function clearMarkAfterNativeEditing() {
+  return ['x', 'v'].map(function(keyCode) {
+    return {
+      type: 'basic',
+      from: {
+        key_code: keyCode,
+        modifiers: {mandatory: ['command'], optional: ['caps_lock']},
+      },
+      to: [
+        {key_code: keyCode, modifiers: ['command']},
+        {set_variable: clearMark()},
+      ],
+      conditions: [ifMarkActive(), unlessEmacs()],
+    };
+  });
 }
 
 // While mark is active, send explicit selection keys in every supported app.
